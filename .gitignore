@@ -40,3 +40,27 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+bootstrap.min.css
+FETTMWeb-20230628.zip
+src/bootstrap.min.css
+src/app/proxy.conf.json.txt
+src/app/bootstrap/css/bootstrap-grid.css
+src/app/bootstrap/css/bootstrap-grid.css.map
+src/app/bootstrap/css/bootstrap-grid.min.css
+src/app/bootstrap/css/bootstrap-grid.min.css.map
+src/app/bootstrap/css/bootstrap-reboot.css
+src/app/bootstrap/css/bootstrap-reboot.css.map
+src/app/bootstrap/css/bootstrap-reboot.min.css
+src/app/bootstrap/css/bootstrap-reboot.min.css.map
+src/app/bootstrap/css/bootstrap.css
+src/app/bootstrap/css/bootstrap.css.map
+src/app/bootstrap/css/bootstrap.min.css
+src/app/bootstrap/css/bootstrap.min.css.map
+src/app/bootstrap/js/bootstrap.bundle.js
+src/app/bootstrap/js/bootstrap.bundle.js.map
+src/app/bootstrap/js/bootstrap.bundle.min.js
+src/app/bootstrap/js/bootstrap.bundle.min.js.map
+src/app/bootstrap/js/bootstrap.js
+src/app/bootstrap/js/bootstrap.js.map
+src/app/bootstrap/js/bootstrap.min.js
+src/app/bootstrap/js/bootstrap.min.js.map
