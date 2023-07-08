@@ -1,0 +1,105 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  Position Column
+
+ <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>{{ displayedTitles.id }}</th>
+    <td mat-cell *matCellDef="let element"><span (click)="editRowId=-1">{{element.id}}</span></td>
+  </ng-container>
+
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef>{{ displayedTitles.price }}</th>
+    <td mat-cell *matCellDef="let element"><span (click)="editRowId=-1">{{element.price}}</span></td>
+  </ng-container>
+
+  <ng-container matColumnDef="tag">
+    <th mat-header-cell *matHeaderCellDef>{{ displayedTitles.tag }}</th>
+    <td mat-cell *matCellDef="let element"><span (click)="editRowId=-1">{{element.tag}}</span></td>
+  </ng-container>
+  
+  <ng-container matColumnDef="track">
+    <th mat-header-cell *matHeaderCellDef>{{ displayedTitles.track }}</th>
+    <td mat-cell *matCellDef="let element"><span (click)="editRowId=-1">{{element.track}}</span></td>
+  </ng-container>
+  
+  <ng-container matColumnDef="section">
+    <th mat-header-cell *matHeaderCellDef>{{ displayedTitles.section }}</th>
+    <td mat-cell *matCellDef="let element"><span (click)="editRowId=-1">{{element.section}}</span></td>
+  </ng-container>
+  
+  <ng-container matColumnDef="plan">
+    <th mat-header-cell *matHeaderCellDef>{{ displayedTitles.plan }}</th>
+    <td mat-cell *matCellDef="let element"><span (click)="editRowId=-1">{{element.plan}}</span></td>
+  </ng-container>
+  
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef>{{ displayedTitles.date }}</th>
+    <td mat-cell *matCellDef="let element"><span (click)="editRowId=-1">{{ element.date | date: 'dd/MM/yyyy HH:mm' }}</span></td>
+  </ng-container>
+  
+   <!-- Editable NEW-PRICE Column -->
+   <ng-container matColumnDef="newprice">
+    <th mat-header-cell *matHeaderCellDef>{{ displayedTitles.newprice }}</th>
+    <td mat-cell *matCellDef="let element" [ngStyle]="element.price==element.newprice?{'background-color': ''} : {'background-color': 'red'}"> 
+      <ng-container *ngIf="element.id!==editRowId">
+        <span (click)="editPrice(element.id)">{{element.newprice}}</span>
+      </ng-container>
+      <ng-container *ngIf="element.id===editRowId">
+        <mat-form-field subscriptSizing="dynamic" class="form-input">
+          <input matInput name="newprice" [(ngModel)]="element.newprice" (blur)="editRowId=-1"> 
+        </mat-form-field>
+      </ng-container>
+      </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+</table>
+
+<!-- <table mat-table [dataSource]="pricesList">
+    <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+      <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
+        <span *ngSwitchDefault>{{ col.label }}</span>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
+          <div class="btn-edit" *ngSwitchCase="'isEdit'">
+            <button mat-button (click)="element.isEdit = !element.isEdit">
+              Edit
+            </button>
+          </div>
+          <span *ngSwitchCase="'date'">
+            {{ element[col.key] | date: 'mediumDate' }}
+          </span>
+          <span *ngSwitchDefault>
+            {{ element[col.key] }}
+          </span>
+        </div>
+        <div [ngSwitch]="col.type" *ngIf="element.isEdit">
+          <div *ngSwitchCase="'isSelected'"></div>
+          <div class="btn-edit" *ngSwitchCase="'isEdit'">
+            <button
+              mat-button
+              (click)="editRow(element)"
+              [disabled]="disableSubmit(element.id)"
+            >
+              Done
+            </button>
+          </div>
+          <mat-form-field class="form-input" *ngSwitchDefault>
+            <input
+              matInput
+              [required]="col.required"
+              [pattern]="col.pattern"
+              [type]="col.type"
+              [(ngModel)]="element[col.key]"
+              (change)="inputHandler($event, element.id, col.key)"
+            />
+          </mat-form-field>
+        </div>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table> -->
+  

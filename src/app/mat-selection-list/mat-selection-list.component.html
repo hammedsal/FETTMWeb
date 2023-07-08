@@ -1,0 +1,10 @@
+<mat-selection-list #DisplayItems (selectionChange)="onSelectionChange($event)" [(ngModel)]="selectedItems" [multiple]="!controlProp.singleSelection">
+  <mat-list-option *ngFor="let objItem of objectsList" [value]="objItem">
+    {{ objItem[controlProp.name] }}
+  </mat-list-option>
+</mat-selection-list>
+
+<p>
+  {{ DisplayItems.selectedOptions.selected.length }} פריטים נבחרו
+<!-- </p>
+<button mat-flat-button [disabled]="controlProp.singleSelection" (click)="selectAll()">בחר הכל</button> -->

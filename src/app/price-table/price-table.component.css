@@ -1,0 +1,14 @@
+th.mat-header-cell {
+    white-space: normal;
+    text-align: center;
+}
+
+td.mat-cell:last-of-type{
+    text-align-last: left;
+}
+
+.form-input {
+    width: 100px;
+    height: 45px;
+    padding-right: 10px;
+}
