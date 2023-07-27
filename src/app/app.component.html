@@ -21,47 +21,10 @@
     margin: 0;
   }
 
-  .spacer {
-    flex: 1;
-  }
-
-  .toolbar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    background-color: #1976d2;
-    color: white;
-    font-weight: 600;
-  }
-
-  .toolbar img {
-    margin: 0 16px;
-  }
-
-  .toolbar #twitter-logo {
-    height: 40px;
-    margin: 0 8px;
-  }
-
-  .toolbar #youtube-logo {
-    height: 40px;
-    margin: 0 16px;
-  }
-
-  .toolbar #twitter-logo:hover,
-  .toolbar #youtube-logo:hover {
-    opacity: 0.8;
-  }
-
   .content {
     display: flex;
-    margin: 82px auto 32px;
+    margin: 15px auto 32px;
     padding: 0 16px;
-    max-width: 960px;
     flex-direction: column;
     align-items: center;
   }
@@ -192,7 +155,7 @@
   }
 
   .terminal pre {
-    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
     color: white;
     padding: 0 1rem 1rem;
     margin: 0;
@@ -230,31 +193,6 @@
     align-items: center;
   }
 
-  .github-star-badge {
-    color: #24292e;
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    padding: 3px 10px;
-    border: 1px solid rgba(27,31,35,.2);
-    border-radius: 3px;
-    background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
-    margin-left: 4px;
-    font-weight: 600;
-  }
-
-  .github-star-badge:hover {
-    background-image: linear-gradient(-180deg,#f0f3f6,#e6ebf1 90%);
-    border-color: rgba(27,31,35,.35);
-    background-position: -.5em;
-  }
-
-  .github-star-badge .material-icons {
-    height: 16px;
-    width: 16px;
-    margin-right: 4px;
-  }
-
   svg#clouds {
     position: fixed;
     bottom: -160px;
@@ -264,14 +202,15 @@
   }
 
   .homepage-btn {
-    width:150px; 
+    width: 150px;
     margin: 10px;
     padding: 10px;
   }
 
   /* Responsive Styles */
   @media screen and (max-width: 767px) {
-    .card-container > *:not(.circle-link) ,
+
+    .card-container>*:not(.circle-link),
     .terminal {
       width: 100%;
     }
@@ -299,26 +238,52 @@
   }
 
   .demeCardTitle {
-    display:flex; 
+    display: flex;
     padding: 8px 16px 0;
   }
+
   .demeCardTitleButton {
     flex-grow: 1;
   }
-  .demeCardTitle > button {
+
+  .demeCardTitle>button {
     padding-top: 1px;
   }
-</style>
 
-<!-- Toolbar -->
-<div class="toolbar" role="banner">
-  <img
-    width="40"
-    alt="Angular Logo"
-    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
-  />
-  <span>Welcome #</span>
-    <div class="spacer"></div>
+  .ttmbanner {
+      background-color: #333;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+    }
+    
+    /* Style for the left and right sections */
+  .left-section,
+  .right-section {
+    flex: 1;
+  }
+
+  /* Style for the middle section */
+  .middle-section {
+    flex: 5;
+    text-align: center;
+  }
+</style>
+<div class="ttmbanner">
+  <div class="left-section">
+    <!-- Add your text/content for the left section here -->
+    <img width="40" alt="TTM" src="/Resources/Images/1-cars.png" />
+  </div>
+  <div class="middle-section">
+    <!-- Add your text/content for the middle section here (main title) -->
+    <h1 style="text-align: center;">מערכת עדכון מחירים</h1>
+  </div>
+  <div class="right-section">
+    <!-- Add your text/content for the right section here -->
+    <a mat-button (click)="goBack()" target="_blank">חזרה לאפליקציה T T M W e b </a>
+  </div>
 </div>
 
 <div class="content" role="main">
@@ -401,8 +366,8 @@
       </div>
     </div>
     <P style="text-align: center;">
-      <button class="homepage-btn" (click)="displayTrackPrices()">Display Track Prices</button>
-      <button class="homepage-btn" (click)="updateTrackPrices()">Save Track Prices</button>
+      <button class="homepage-btn" (click)="displayTrackPrices()">הצגת מחירים</button>
+      <button class="homepage-btn" (click)="updateTrackPrices()">שמירת שינויים</button>
     </P>
     <custom-price-table #pricesTable></custom-price-table>
   </main>
@@ -413,4 +378,4 @@
 
 </div>
 
-<router-outlet></router-outlet>
+<!-- <router-outlet></router-outlet> -->

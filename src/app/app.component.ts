@@ -1,5 +1,6 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from './../environments/environment';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Directionality } from '@angular/cdk/bidi';
@@ -27,9 +28,7 @@ export class AppComponent {
   @ViewChild('tracksSelectionList') tracksSelectionList!: CustomSelectionList;
   @ViewChild('pricesTable') pricesTable!: PriceTableComponent;
 
-  //BASE_HOST_URL: string = 'http://dtm.ttmweb.net'; // PRODUCTION
-  BASE_HOST_URL: string = 'https://dev45api.ttmweb.net'; // DEV45
-  //BASE_HOST_URL: string = 'https://localhost:44310'; // LOCALHOST
+  BASE_HOST_URL: string = environment.apiUrl; //'https://dev45api.ttmweb.net';
 
   tagProp: any = {
     id: 'tagId', name: 'tagName',
@@ -82,7 +81,10 @@ export class AppComponent {
     private route: ActivatedRoute,
     private dir: Directionality, 
     private http: HttpClient, 
-    private globalService: GlobalService) { }
+    private globalService: GlobalService) { 
+
+    }
+
 
   displayWith(value: any) {
     return value?.Title;
@@ -94,27 +96,18 @@ export class AppComponent {
   ngOnInit() {
     console.log('Calling ngOnInit()');
 
-    // Retrieve the access token from the query parameters
-    this.route.queryParams.subscribe(params => {
-      
-      console.log('params = ' + JSON.stringify(params));
-      
-      let hasToken:boolean = false;
-      if(params && Object.keys(params).includes('accessToken')) {
-        const backendAccessToken = params['accessToken'];
-        console.log('backendAccessToken = ' + backendAccessToken);
+    console.log('Environment: ' + JSON.stringify(environment));
 
-        // Check if accessToken parameter exists and is not empty
-        if (backendAccessToken.length > 100) {
-          console.log('ngOnInit:: Access token from Backend:', backendAccessToken);
-          hasToken = true;
-          this.preLoadData(backendAccessToken);
-        } else {// if no token, call API to get a new one
-          console.log('ngOnInit:: Trying getting token from API');
-          this.getAccessToken();
-        }
-      }
-    });
+    this.accessToken = sessionStorage.getItem('API_ACCESS_TOKEN') || '';
+
+    if (!!this.accessToken) {
+      this.preLoadData(this.accessToken);
+    }
+
+  }
+
+  goBack() {
+    window.history.back();
   }
   
   onClientSelected(selectedClients: TTMClientDto[]) {
@@ -164,7 +157,7 @@ export class AppComponent {
     
     console.log('Calling getAccessToken()');
     //const url = this.BASE_HOST_URL + '/token';
-    const url = 'https://dev45api.ttmweb.net/token';
+    const url = this.BASE_HOST_URL + '/token';
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
       'cache-control': 'no-cache'
@@ -182,7 +175,9 @@ export class AppComponent {
         // this.expiresIn = response.expires_in;
         // this.userName = response.userName;
         // this.roleName = response.roleName;
-        console.log('Access token from Frontend:', response.access_token);
+        this.accessToken = response.access_token;
+
+        console.log('Access token reached from API:', response.access_token);
 
         this.preLoadData(response.access_token);
       },
@@ -194,7 +189,9 @@ export class AppComponent {
 
   preLoadData(apiToken: string) {
     
-    this.accessToken = apiToken;
+    console.log('preLoadData: ' + apiToken);
+
+    // save in session
     this.globalService.setAccessToken(apiToken);
     
     this.getClients();

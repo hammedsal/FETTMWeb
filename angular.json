@@ -52,7 +52,21 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
+            },
+            "uat": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.uat.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -62,6 +76,9 @@
           "configurations": {
             "production": {
               "browserTarget": "FETTMWeb:build:production"
+            },
+            "uat": {
+              "browserTarget": "FETTMWeb:build:uat"
             },
             "development": {
               "browserTarget": "FETTMWeb:build:development"
