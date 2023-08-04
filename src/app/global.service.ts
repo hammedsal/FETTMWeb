@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TTMPriceColumnDefinitions } from './UserDefinedTypes/ttmprice-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -78,4 +79,13 @@ export class GlobalService {
 
     return true;
   }
+
+  getColumnTitles(): { [key: string]: string } {
+    const columnLabels: { [key: string]: string } = {};
+    TTMPriceColumnDefinitions.forEach((column) => {
+      columnLabels[column.key] = column.label;
+    });
+    return columnLabels;
+  }
+
 }

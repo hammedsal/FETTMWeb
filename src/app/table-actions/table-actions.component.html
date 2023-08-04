@@ -1,0 +1,35 @@
+<div
+  class="table-actions"
+>
+  <div class="action-row">
+    <label>Show Zero Prices</label>
+    <div class="action-control">
+      <input type="checkbox" [(ngModel)]="showZeroProces" />
+    </div>
+  </div>
+  <div class="action-row">
+    <label>Sort by Column:</label>
+    <div class="action-control">
+      <select [(ngModel)]="selectedSortingColumn">
+        <option *ngFor="let column of displayedColumnKeys" [value]="column">{{ displayedColumnTitles[column] }}</option>
+      </select>
+      <label>Order:</label>
+      <input type="radio" name="selectedSortingOrder" value="ASC" [(ngModel)]="selectedSortingOrder" />ASC
+      <input type="radio" name="selectedSortingOrder" value="DESC" [(ngModel)]="selectedSortingOrder" />DESC
+    </div>
+  </div>
+  <div class="action-row">
+    <label>Increase by Amount:</label>
+    <div class="action-control">
+      <input type="number" [(ngModel)]="priceIncAmount" />
+    </div>
+    <div class="separator"></div>
+    <label>Increase by Percentage:</label>
+    <div class="action-control">
+      <input type="number" [(ngModel)]="priceIncPercent" />
+    </div>
+  </div>
+  <div class="apply-button-container">
+    <button class="apply-button" (click)="onApply()">Apply</button>
+  </div>
+</div>

@@ -22,6 +22,7 @@ import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { TableActionsComponent } from './table-actions/table-actions.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     AppComponent,
     CustomSelectionList,
     MatClientListComponent,
-    PriceTableComponent
+    PriceTableComponent,
+    TableActionsComponent
   ],
   imports: [
     BrowserModule,

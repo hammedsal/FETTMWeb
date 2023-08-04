@@ -1,7 +1,8 @@
 import { Component, ViewChildren, OnInit, QueryList, ElementRef, Input, ViewChild } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import { MatTable, MatTableDataSource } from '@angular/material/table'
-import { TTMPriceDto, TTMPriceColumns } from '../UserDefinedTypes/ttmprice-dto';
+import { TTMPriceDto, TTMPriceDisplayedColumnKeys } from '../UserDefinedTypes/ttmprice-dto';
+import { GlobalService } from '../global.service';
 
 
 @Component({
@@ -16,17 +17,16 @@ export class PriceTableComponent {
   @ViewChildren(MatInput,{read:ElementRef}) inputs!: QueryList<ElementRef>;
   
   editRowId:number=2;
-  displayedColumns: string[] = ['track', 'tag', 'section', 'plan', 'price', 'newprice', 'date' ]; //TTMPriceColumns.map((col) => col.key);
-  displayedTitles: any = {'id':'מזהה', 'price':'מחיר', 'newprice':'מחיר מעודכן', 'tag':'שם תמחיר', 'track':'שם מסלול', 'section':'סוג מחיר', 'plan':'שיטת חישוב', 'date':'עדכון אחרון' };
+  displayedColumnKeys: string[] = TTMPriceDisplayedColumnKeys;
+  displayedColumnTitles: any = this.globalService.getColumnTitles();
 
-  columnsSchema: any = TTMPriceColumns;
   valid: any = {}
 
   // Datasource for table
   dataSource: MatTableDataSource<TTMPriceDto> =
     new MatTableDataSource<TTMPriceDto>();
 
- // constructor(public dialog: MatDialog, private userService: UserService) {}
+    constructor(private globalService: GlobalService) {}
 
   ngOnInit() {
     let tableData: Array<TTMPriceDto> = [];

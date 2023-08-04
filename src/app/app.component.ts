@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { environment } from './../environments/environment';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -68,6 +67,7 @@ export class AppComponent {
   ALL_ITEMS: number[] = [-1];
 
   accessToken: string = '';
+  companyName: string = '';
   expiresIn: number = 0;
   userName: string = '';
   roleName: string = '';
@@ -76,10 +76,11 @@ export class AppComponent {
   isLoading = false;
   errorMsg!: string;
   minLengthTerm = 3;
+  showTableActions = false;
 
   constructor(
-    private route: ActivatedRoute,
-    private dir: Directionality, 
+    //private route: ActivatedRoute,
+    //private dir: Directionality, 
     private http: HttpClient, 
     private globalService: GlobalService) { 
 
@@ -99,11 +100,16 @@ export class AppComponent {
     console.log('Environment: ' + JSON.stringify(environment));
 
     this.accessToken = sessionStorage.getItem('API_ACCESS_TOKEN') || '';
+    this.companyName = sessionStorage.getItem('API_COMPANY_NAME') || 'TTM - A BMS PRODUCT';
 
     if (!!this.accessToken) {
       this.preLoadData(this.accessToken);
     }
 
+  }
+
+  showHideTableActions() {
+    this.showTableActions = !this.showTableActions;
   }
 
   goBack() {

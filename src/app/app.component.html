@@ -202,7 +202,7 @@
   }
 
   .homepage-btn {
-    width: 150px;
+    width: 250px;
     margin: 10px;
     padding: 10px;
   }
@@ -251,18 +251,22 @@
   }
 
   .ttmbanner {
-      background-color: #333;
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-    }
-    
-    /* Style for the left and right sections */
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    /*justify-content: space-between;*/
+    align-items: center;
+    padding: 1px;
+
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  /* Style for the left and right sections */
   .left-section,
   .right-section {
     flex: 1;
+    text-align: center;
   }
 
   /* Style for the middle section */
@@ -270,19 +274,55 @@
     flex: 5;
     text-align: center;
   }
+
+  .section-flex {
+    display: flex;
+    align-items: stretch;
+    /* baseline | center | stretch */
+  }
+
+  .section-flex>* {
+    padding: 5px;
+    margin: 5px;
+  }
+
+  .goback-link {
+    font-size: 14px;
+    color: white !important;
+  }
 </style>
+
 <div class="ttmbanner">
+
   <div class="left-section">
     <!-- Add your text/content for the left section here -->
-    <img width="40" alt="TTM" src="/Resources/Images/1-cars.png" />
+
+    <div class="section-flex">
+      <!-- <img width="40" alt="TTM" src="/Resources/Images/1-cars.png" /> -->
+      <img width="40" alt="TTM" src="https://dev45.ttmweb.net/Resources/Images/1-cars.png" />
+      <a mat-button class="goback-link" target="_blank">
+        <span>שם חשבון</span><br />
+        <span>{{ companyName }}</span>
+        </a>
+    </div>
   </div>
+
   <div class="middle-section">
     <!-- Add your text/content for the middle section here (main title) -->
     <h1 style="text-align: center;">מערכת עדכון מחירים</h1>
   </div>
+
   <div class="right-section">
     <!-- Add your text/content for the right section here -->
-    <a mat-button (click)="goBack()" target="_blank">חזרה לאפליקציה T T M W e b </a>
+    <div class="section-flex">
+      <a mat-button class="goback-link" (click)="goBack()" target="_blank">
+        <span>חזרה לאפליקציה</span><br />
+        <span>T T M W e b</span>
+      </a>
+      <button mat-icon-button color="primary" class="goback-link" (click)="goBack()">
+        <mat-icon>home</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -308,7 +348,7 @@
                 <div class="demeCardTitleButton"></div>
                 <button mat-icon-button><mat-icon></mat-icon></button>
               </div>
-                <mat-card-content>
+              <mat-card-content>
                 <custom-selection-list #clientsSelectionList [objectsList]="clientsFullList" [controlProp]="clientProp"
                   (onItemSelected)="onClientSelected($event)"></custom-selection-list>
               </mat-card-content>
@@ -332,7 +372,7 @@
             </div>
             <mat-card-content>
               <custom-selection-list #tracksSelectionList [objectsList]="tracksFullList" [controlProp]="trackProp"
-              (onItemSelected)="onTrackSelected($event)"></custom-selection-list>
+                (onItemSelected)="onTrackSelected($event)"></custom-selection-list>
             </mat-card-content>
           </mat-card>
 
@@ -356,7 +396,7 @@
               </div>
               <mat-card-content>
                 <custom-selection-list #tagsSelectionList [objectsList]="tagsFullList" [controlProp]="tagProp"
-                (onItemSelected)="onTagSelected($event)"></custom-selection-list>
+                  (onItemSelected)="onTagSelected($event)"></custom-selection-list>
               </mat-card-content>
             </mat-card>
           </div>
@@ -366,10 +406,28 @@
       </div>
     </div>
     <P style="text-align: center;">
-      <button class="homepage-btn" (click)="displayTrackPrices()">הצגת מחירים</button>
-      <button class="homepage-btn" (click)="updateTrackPrices()">שמירת שינויים</button>
+
+      <button mat-fab extended color="primary" (click)="displayTrackPrices()" class="homepage-btn">
+        <mat-icon>table_chart</mat-icon>
+        הצגת מחירים
+      </button>
+      <button mat-fab extended color="warn" (click)="updateTrackPrices()" class="homepage-btn">
+        <mat-icon>cloud_upload</mat-icon>
+        שמירת שינויים
+      </button>
+
+      <button mat-icon-button color="basic" (click)="showHideTableActions()" class="homepage-btn1">
+        <mat-icon>filter_list</mat-icon>
+      </button>
+
     </P>
+    
+    <div>
+      <app-table-actions *ngIf="showTableActions"></app-table-actions>
+    </div>
+
     <custom-price-table #pricesTable></custom-price-table>
+
   </main>
 
   <!-- here are the new blocks-->

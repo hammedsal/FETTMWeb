@@ -28,62 +28,64 @@ export class TTMPriceDto {
             "date": "01/01/2000 00:00" // idx = 6
 */
 
-export const TTMPriceColumns = [
+export const TTMPriceDisplayedColumnKeys = ['track', 'tag', 'section', 'plan', 'price', 'newprice', 'date' ];
+
+export const TTMPriceColumnDefinitions = [
+  {
+      key: 'id',
+      type: 'number',
+      label: 'מזהה',
+      required: false,
+      style: 'hidden'
+    },
     {
-        key: 'id',
-        type: 'number',
-        label: 'מזהה',
-        required: false,
-        style: 'hidden'
-      },
-      {
-        key: 'price',
-        type: 'number',
-        label: 'מחיר',
-        required: true,
-        style: 'normal'
-      },
-      {
-        key: 'tag',
-        type: 'text',
-        label: 'תווית',
-        required: true,
-        style: 'normal'
-      },
-      {
-        key: 'track',
-        type: 'text',
-        label: 'מסלול',
-        required: true,
-        style: 'normal'
-      },
-      {
-        key: 'section',
-        type: 'text',
-        label: 'לקוח/קבלן',
-        required: true,
-        style: 'normal'
-      },
-      {
-        key: 'plan',
-        type: 'text',
-        label: 'הובלה/יחידה',
-        required: true,
-        style: 'normal'
-      },
-      {
-        key: 'date',
-        type: 'date',
-        label: 'ת.עדכון',
-        required: true,
-        style: 'normal'
-      },
-      {
-        key: 'isEdit',
-        type: 'isEdit',
-        label: '',
-        required: true,
-        style: 'button'
-      },
-  ];
+      key: 'price',
+      type: 'number',
+      label: 'מחיר',
+      required: true,
+      style: 'normal'
+    },
+    {
+      key: 'newprice',
+      type: 'number',
+      label: 'מחיר מעודכן',
+      required: true,
+      style: 'normal'
+    },
+    {
+      key: 'tag',
+      type: 'text',
+      label: 'שם תמחיר',
+      required: true,
+      style: 'normal'
+    },
+    {
+      key: 'track',
+      type: 'text',
+      label: 'שם מסלול',
+      required: true,
+      style: 'normal'
+    },
+    {
+      key: 'section',
+      type: 'text',
+      label: 'סוג מחיר',
+      required: true,
+      style: 'normal'
+    },
+    {
+      key: 'plan',
+      type: 'text',
+      label: 'שיטת חישוב',
+      required: true,
+      style: 'normal'
+    },
+    {
+      key: 'date',
+      type: 'date',
+      label: 'עדכון אחרון',
+      required: true,
+      style: 'normal'
+    }
+];
 
