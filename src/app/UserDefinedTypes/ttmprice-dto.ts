@@ -1,21 +1,13 @@
 export class TTMPriceDto {
     id: number = -1;
     price: number = 0;
-    newprice: string = '';
+    newprice: number = 0;
     tag: string = '';
     track: string = '';
     section: string = '';
     plan: string = '';
     date: string = '01/01/2000 00:00';
 
-    // public get entityId() : number {
-    //     return this.id;
-    // }
-     
-    
-    // public get entityName() : string {
-    //     return this.track + '/' + this.tag;
-    // }
 }
 
 /*

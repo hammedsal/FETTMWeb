@@ -6,9 +6,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CustomSelectionList } from './mat-selection-list/mat-selection-list.component';
 import { MatListModule, MatSelectionListChange } from '@angular/material/list';
-import {MatCardModule} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,8 +22,8 @@ import { PriceTableComponent } from './price-table/price-table.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TableActionsComponent } from './table-actions/table-actions.component';
 
 
@@ -39,6 +41,8 @@ import { TableActionsComponent } from './table-actions/table-actions.component';
     MatListModule,
     MatCardModule,
     MatButtonModule,
+    MatButtonToggleModule,
+    MatSelectModule,
     MatAutocompleteModule,
     HttpClientModule,
     FormsModule,

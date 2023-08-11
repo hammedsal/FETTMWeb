@@ -1,6 +1,7 @@
 export class TTMClientDto {
     entityId: number = -1;
     entityName: string = '';
+    companyName: string = '';
 }
 /*
         {

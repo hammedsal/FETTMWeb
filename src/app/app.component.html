@@ -423,12 +423,12 @@
     </P>
     
     <div>
-      <app-table-actions *ngIf="showTableActions"></app-table-actions>
+      <app-table-actions *ngIf="showTableActions" (applyActions)="onApplyActions($event)"></app-table-actions>
     </div>
 
     <custom-price-table #pricesTable></custom-price-table>
 
-  </main>
+      </main>
 
   <!-- here are the new blocks-->
 

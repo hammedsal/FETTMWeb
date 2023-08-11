@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { GlobalService } from '../global.service';
 import { TTMPriceDisplayedColumnKeys } from '../UserDefinedTypes/ttmprice-dto';
+import { TableActionsDto } from '../UserDefinedTypes/table-actions-dto';
 
 @Component({
   selector: 'app-table-actions',
@@ -8,9 +9,15 @@ import { TTMPriceDisplayedColumnKeys } from '../UserDefinedTypes/ttmprice-dto';
   styleUrls: ['./table-actions.component.css'],
 })
 export class TableActionsComponent implements OnInit {
-  showZeroProces: boolean = false;
-  selectedSortingColumn: string = ''; // Store the selected column for sorting
+  showZeroPrices: boolean = true;
+  showZeroTitleOFF: string = 'לא כולל אפסים';
+  showZeroTitleON: string = 'הכל כולל אפסים';
+
   selectedSortingOrder: string = 'ASC'; // Store the sorting order ('ASC' or 'DESC')
+  sortingOrderTitleASC: string = 'עולה';
+  sortingOrderTitleDESC: string = 'יורד';
+
+  selectedSortingColumn: string = 'track'; // Store the selected column for sorting
   priceIncAmount: number = 0; // Amount to increase the prices
   priceIncPercent: number = 0; // Percentage to increase the prices
 
@@ -26,17 +33,31 @@ export class TableActionsComponent implements OnInit {
     // Initialize the input fields if needed
     this.priceIncAmount = 0;
     this.priceIncPercent = 0;
+
+  }
+
+  changeZeroPricesGroup(showZeroPrices: boolean) {
+    this.showZeroPrices = showZeroPrices;
+  }
+
+  changeSortingOrderGroup(selectedSortingOrder: string) {
+    this.selectedSortingOrder = selectedSortingOrder;
   }
 
   onApply() {
     // Create an actions object containing the selected options and emit it to the parent component
-    const actions = {
-      showZeroProces: this.showZeroProces,
+    let actions: TableActionsDto = {
+      showZeroPrices: this.showZeroPrices, // boolean
       selectedSortingColumn: this.selectedSortingColumn,
       selectedSortingOrder: this.selectedSortingOrder,
-      priceIncAmount: this.priceIncAmount,
-      priceIncPercent: this.priceIncPercent,
+      priceIncAmount: this.priceIncAmount, // number
+      priceIncPercent: this.priceIncPercent, // number
     };
+
+    // reset these numbers to prevent multiple actions on same data
+    this.priceIncAmount = 0;
+    this.priceIncPercent = 0;
+
     this.applyActions.emit(actions);
   }
 }

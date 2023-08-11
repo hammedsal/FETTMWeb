@@ -32,7 +32,7 @@ export class PriceTableComponent {
     let tableData: Array<TTMPriceDto> = [];
     this.dataSource = new MatTableDataSource<TTMPriceDto>(tableData);
 
-    console.log('No Prices to display !');
+    // console.log('No Prices to display !');
   }
 
   editPrice(priceId: number)

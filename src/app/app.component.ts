@@ -1,17 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
 import { environment } from './../environments/environment';
+import { GlobalService } from './global.service';
+import { CustomSelectionList } from './mat-selection-list/mat-selection-list.component';
+import { PriceTableComponent } from './price-table/price-table.component';
 
+import { MatTableDataSource } from '@angular/material/table'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Directionality } from '@angular/cdk/bidi';
+
 import { TTMTrackDto } from './UserDefinedTypes/ttmtrack-dto';
 import { TTMClientDto } from './UserDefinedTypes/ttmclient-dto';
 import { TTMTagDto } from './UserDefinedTypes/ttmtag-dto';
 import { TTMPriceDto } from './UserDefinedTypes/ttmprice-dto';
-import { CustomSelectionList } from './mat-selection-list/mat-selection-list.component';
-import { PriceTableComponent } from './price-table/price-table.component';
-import { MatTableDataSource } from '@angular/material/table'
+import { TableActionsDto } from './UserDefinedTypes/table-actions-dto';
 
-import { GlobalService } from './global.service';
 
 const API_KEY = "e8067b53"
 
@@ -57,6 +59,7 @@ export class AppComponent {
     displayListTitle: 'מחירים'
   };
 
+  currentActions: TableActionsDto = new TableActionsDto();
   tagsFullList: TTMTagDto[] = [];
   clientsFullList: TTMClientDto[] = [];
   tracksFullList: TTMTrackDto[] = [];
@@ -81,10 +84,10 @@ export class AppComponent {
   constructor(
     //private route: ActivatedRoute,
     //private dir: Directionality, 
-    private http: HttpClient, 
-    private globalService: GlobalService) { 
+    private http: HttpClient,
+    private globalService: GlobalService) {
 
-    }
+  }
 
 
   displayWith(value: any) {
@@ -95,12 +98,13 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    console.log('Calling ngOnInit()');
+    // console.log('Calling ngOnInit()');
 
     console.log('Environment: ' + JSON.stringify(environment));
 
     this.accessToken = sessionStorage.getItem('API_ACCESS_TOKEN') || '';
     this.companyName = sessionStorage.getItem('API_COMPANY_NAME') || 'TTM - A BMS PRODUCT';
+    this.companyName = decodeURIComponent(this.companyName);
 
     if (!!this.accessToken) {
       this.preLoadData(this.accessToken);
@@ -115,13 +119,13 @@ export class AppComponent {
   goBack() {
     window.history.back();
   }
-  
+
   onClientSelected(selectedClients: TTMClientDto[]) {
     if (!!selectedClients && !!selectedClients[0]) {
-      console.log(selectedClients);
+      // console.log(selectedClients);
       const clientId = selectedClients[0].entityId;
       this.globalService.setSelectedClient(clientId);
-      console.log('selectedClients= ' + clientId);
+      // console.log('selectedClients= ' + clientId);
 
       this.getClientTracks(clientId);
 
@@ -141,7 +145,7 @@ export class AppComponent {
       }
     } else {
       this.globalService.setSelectedTracks([]);
-      console.log('No selected tracks');
+      // console.log('No selected tracks');
     }
   }
 
@@ -155,13 +159,76 @@ export class AppComponent {
       }
     } else {
       this.globalService.setSelectedTags([]);
-      console.log('No selected tags');
+      // console.log('No selected tags');
     }
   }
 
+  onApplyActions(actions: TableActionsDto) {
+    // hold a copy of old actions to be used after re-fetch
+    this.currentActions = actions;
+
+    let filteredPrices = [...this.pricesFullList];
+
+    console.log('actions.showZeroPrices = ' + actions.showZeroPrices);
+    console.log('Boolean(actions.showZeroPrices)  = ' + Boolean(actions.showZeroPrices) );
+    if (actions.showZeroPrices+'' !== 'true') {
+      filteredPrices = filteredPrices.filter((price) => price.price !== 0);
+      console.log(filteredPrices);
+    }
+
+    if (actions.selectedSortingColumn) {
+      let column: string = actions.selectedSortingColumn;
+      const order = actions.selectedSortingOrder === 'ASC' ? 1 : -1;
+
+      switch (column) {
+        case "track":
+          filteredPrices = filteredPrices.sort((a, b) => ((a.track > b.track) ? 1 : -1) * order);
+          break;
+        case "tag":
+          filteredPrices = filteredPrices.sort((a, b) => ((a.tag > b.tag) ? 1 : -1) * order);
+          break;
+        case "section":
+          filteredPrices = filteredPrices.sort((a, b) => ((a.section > b.section) ? 1 : -1) * order);
+          break;
+        case "plan":
+          filteredPrices = filteredPrices.sort((a, b) => ((a.plan > b.plan) ? 1 : -1) * order);
+          break;
+        case "price":
+          filteredPrices = filteredPrices.sort((a, b) => (a.price - b.price) * order);
+          break;
+        case "newprice":
+          filteredPrices = filteredPrices.sort((a, b) => ((a.newprice > b.newprice) ? 1 : -1) * order);
+          break;
+        case "date":
+          filteredPrices = filteredPrices.sort((a, b) => (new Date(a.date).getTime() - new Date(b.date).getTime()) * order);
+          break;
+        default:
+          console.log("Unknown column.");
+          break;
+      }
+    }
+
+    if (actions.priceIncAmount !== 0) {
+      filteredPrices.forEach((price) => (price.newprice = price.price == 0 ? 0 : price.price + actions.priceIncAmount));
+    }
+
+    if (actions.priceIncPercent !== 0) {
+      const factor = 1 + actions.priceIncPercent / 100;
+      filteredPrices.forEach((price) => (price.newprice = Number((price.price * factor).toFixed(2))));
+    }
+
+    // reset to prevent multiple action execution
+    actions.priceIncAmount = 0;
+    actions.priceIncPercent = 0;
+
+    let tableData: Array<TTMPriceDto> = filteredPrices;
+    this.pricesTable.dataSource = new MatTableDataSource<TTMPriceDto>(tableData);
+
+  }
+
   getAccessToken() {
-    
-    console.log('Calling getAccessToken()');
+
+    // console.log('Calling getAccessToken()');
     //const url = this.BASE_HOST_URL + '/token';
     const url = this.BASE_HOST_URL + '/token';
     const headers = new HttpHeaders({
@@ -183,7 +250,7 @@ export class AppComponent {
         // this.roleName = response.roleName;
         this.accessToken = response.access_token;
 
-        console.log('Access token reached from API:', response.access_token);
+        // console.log('Access token reached from API:', response.access_token);
 
         this.preLoadData(response.access_token);
       },
@@ -194,12 +261,12 @@ export class AppComponent {
   }
 
   preLoadData(apiToken: string) {
-    
-    console.log('preLoadData: ' + apiToken);
+
+    // console.log('preLoadData: ' + apiToken);
 
     // save in session
     this.globalService.setAccessToken(apiToken);
-    
+
     this.getClients();
     this.getTags();
 
@@ -218,6 +285,11 @@ export class AppComponent {
         // Process the response data as needed
         const apiResponse: any = response;
         this.clientsFullList = apiResponse.entities;
+
+        if (this.clientsFullList != null && this.clientsFullList.length > 0) {
+          this.companyName = this.clientsFullList[0].companyName;
+          console.log(this.companyName);
+        }
       },
       error => {
         console.error(error);
@@ -235,10 +307,10 @@ export class AppComponent {
 
     this.http.get(url, { headers: headers, responseType: 'json' }).subscribe(
       response => {
-        console.log(response);
+        // console.log(response);
         // Process the response data as needed
         const apiResponse: any = response;
-        console.log(apiResponse.entities);
+        // console.log(apiResponse.entities);
         this.tagsFullList = apiResponse.entities;
         this.tagIdsFullList = this.tagsFullList.map(item => item.tagId);
       },
@@ -277,7 +349,7 @@ export class AppComponent {
       let tableData: Array<TTMPriceDto> = [];
       this.pricesTable.dataSource = new MatTableDataSource<TTMPriceDto>(tableData);
 
-      console.log('No Prices to display !');
+      // console.log('No Prices to display !');
       return;
     }
 
@@ -302,8 +374,9 @@ export class AppComponent {
           item => this.prepareListItem(item)
         );
 
-        let tableData: Array<TTMPriceDto> = this.pricesFullList;
-        this.pricesTable.dataSource = new MatTableDataSource<TTMPriceDto>(tableData);
+        this.onApplyActions(this.currentActions);
+        //let tableData: Array<TTMPriceDto> = this.pricesFullList;
+        //this.pricesTable.dataSource = new MatTableDataSource<TTMPriceDto>(tableData);
 
       },
       error => {
@@ -313,7 +386,7 @@ export class AppComponent {
   }
 
   prepareListItem(item: TTMPriceDto) {
-    item.newprice = item.price.toString();
+    item.newprice = item.price;
     item.section = item.section === 'S1' ? 'לקוח' : 'קבלן';
     item.plan = item.plan === 'U' ? 'יחידה' : 'הובלה';
   }
@@ -333,9 +406,9 @@ export class AppComponent {
     const tagIds = this.globalService.getSelectedTags();
     const trackIds = this.globalService.getSelectedTracks();
 
-    console.log('ClientId= ' + clientId);
-    console.log('TagIds= ' + tagIds);
-    console.log('TrackIds= ' + trackIds);
+    // console.log('ClientId= ' + clientId);
+    // console.log('TagIds= ' + tagIds);
+    // console.log('TrackIds= ' + trackIds);
 
     this.getPrices(clientId, trackIds, tagIds);
 
@@ -344,7 +417,7 @@ export class AppComponent {
   updateTrackPrices(): void {
 
     const clientId = this.globalService.getSelectedClient();
-    console.log('ClientId= ' + clientId);
+    // console.log('ClientId= ' + clientId);
 
     const url = this.BASE_HOST_URL + '/api/ttmprices/' + clientId;
     const headers = new HttpHeaders({
@@ -354,9 +427,9 @@ export class AppComponent {
     });
 
     const priceChanges = this.pricesFullList
-      .filter((price) => price.price !== parseFloat(price.newprice))
+      .filter((price) => price.price !== price.newprice)
       .map(dto => ({ "id": dto.id, "price": dto.newprice }));
-    console.log('priceChanges= ' + JSON.stringify(priceChanges));
+    // console.log('priceChanges= ' + JSON.stringify(priceChanges));
 
     let body = { "prices": priceChanges };
 
@@ -369,8 +442,9 @@ export class AppComponent {
         // set newprice = price for all items
         this.mergeUpdatedPrices(updatedPricesList);
 
-        let tableData: Array<TTMPriceDto> = this.pricesFullList;
-        this.pricesTable.dataSource = new MatTableDataSource<TTMPriceDto>(tableData);
+        this.onApplyActions( this.currentActions);
+        // let tableData: Array<TTMPriceDto> = this.pricesFullList;
+        // this.pricesTable.dataSource = new MatTableDataSource<TTMPriceDto>(tableData);
 
       },
       error => {
